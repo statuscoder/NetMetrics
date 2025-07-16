@@ -1,0 +1,7 @@
+{
+    "require": {
+        "textalk/websocket": "^1.6",
+        "ppelisset/fileno": "^0.2.0",
+        "workerman/channel": "^1.2"
+    }
+}

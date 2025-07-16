@@ -1,0 +1,4 @@
+2025-07-16 18:55:30 pid:8364 Workerman[ws_main.php] start in DEBUG mode
+2025-07-16 18:55:41 pid:8364 Workerman[ws_main.php] received signal SIGTSTP
+2025-07-16 18:55:41 pid:8364 Workerman[ws_main.php] stopping
+2025-07-16 18:55:41 pid:8364 Workerman[ws_main.php] has been stopped

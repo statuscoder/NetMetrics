@@ -1,0 +1,29 @@
+{
+  "name": "ppelisset/fileno",
+  "description": "Get a file descriptor from a stream",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pierre Pélisset",
+      "email": "ppelisset@hotmail.fr"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "src/fileno.php",
+      "src/PHPApi.php"
+    ]
+  },
+  "require": {
+    "php": ">=8.0",
+    "ext-ffi": "*"
+  },
+  "require-dev": {
+    "pestphp/pest": "1.21.3"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
