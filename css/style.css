@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.root{
+  padding: 20px;
+}
+
+.navi{
+  padding: 15px 0;
+}
+
+.button {
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
+.button:active {
+  background-color: #004494;
+}
+
+.button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.styled-textarea {
+  width: 100%;
+  min-height: 500px;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical; /* или none, both, horizontal */
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  resize: vertical;
+}
+
+.styled-textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}

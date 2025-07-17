@@ -1,0 +1,168 @@
+<!DOCTYPE html><html class="camera">
+<head>
+  <meta charset="utf-8">
+  <title>NetMetric</title>
+  <style type="text/css">
+  body html{padding:0px;margin0px;}
+  body{overflow-y:hidden;}
+  </style>
+  <link href="./css/style.css?v=1" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="root">
+    <textarea class="styled-textarea" placeholder="status ..." id="ta_log"></textarea>
+    <div class="navi"><input type=button id="go" value="Go!" class="button" disabled></div>
+</div>
+
+<script type="text/javascript">
+	var hostname  = document.location.hostname;
+	var websocket = 'ws://'+hostname+':5557';
+	var method = {};
+  var keyName = 'myKey';
+  var myKey = localStorage.getItem(keyName);
+  var watchId;
+  var size = 0;
+  var starttime = 0;
+  var chunk = '';
+  var steps = 0;
+
+
+  const textarea = document.getElementById('ta_log');
+  const go = document.getElementById('go');
+
+  const log = (text, nl) => {
+    const now = new Date();
+    const time = now.toTimeString().split(' ')[0];
+    textarea.value += `[${time}] ${text}`+((nl === false)?'':'\n');
+    if (document.activeElement !== textarea){
+      textarea.scrollTop = textarea.scrollHeight;
+    }
+  };
+
+  const act = (act_id, body) => JSON.stringify({ ...{act:act_id}, ...body});
+  const isEmpty = obj => obj && Object.keys(obj).length === 0 && obj.constructor === Object;
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    if (!myKey)
+        myKey  = 0;
+
+    start(websocket);
+  });
+
+	function start(addr){
+      log("Trying to connect to the server");
+	    method['ws'] = new WebSocket(addr+"?S=1");
+
+	    method['ws'].onopen = function(){
+      log("Сonnection is open");
+      (myKey)?log(`Key found id:${myKey}`):log("No key, authorization required")
+      method['ws'].send(act(1, {id: myKey}));
+
+      go.disabled = false;
+	};
+
+	method['ws'].onmessage = function(evt){
+			try {
+				  	var json = JSON.parse(evt.data);
+
+				  	if (json["act"])
+				  	{
+                switch (json["act"]) {
+                  case 1:{//Auth
+                          if (!myKey && json["id"]){
+                            myKey = json["id"];
+                            log(`Key id:${myKey} received and saved`);
+                            localStorage.setItem(keyName, myKey);
+                          }
+                          break;
+                        }
+                  case 2://pong
+                        if (json["avg"] === undefined){
+                          method['ws'].send(evt.data);
+                          log(`Pong ${json["time"]}`);
+                        }
+                        else {
+                          log(`Average Ping ${json["avg"]}ms`);
+                        }
+
+                    break;
+                  case 4://download finish
+                        if (size){
+                          var delay = ((performance.now() - starttime) / 1000).toFixed(3);
+                          var total = (size/1024/1024).toFixed(3);
+                          textarea.value += `${total}Mb in ${delay}sec\n`;
+                          var download_speed = ((total/delay)*8).toFixed(3);
+                          log(`Download speed ${download_speed}Mbps`);
+                          method['ws'].send(act(4, {total: total, delay: delay, speed:download_speed}));
+
+                          method['ws'].send(act(5));
+                          log("Upload test ....", false);
+
+                          for(var i=0; i<steps; i++){
+                            textarea.value += '.'
+                            method['ws'].send(chunk);
+                          }
+
+                          method['ws'].send(act(5, {stop:true}));
+
+                          steps = 0;
+                          size  = 0;
+                        }
+                    break;
+
+                    case 5://upload
+                      if (json["total"]){
+                        textarea.value += json["total"]+'Mb in '+json["delay"]+'sec\n';
+                        log(`Upload speed ${json["speed"]}Mbps`);
+
+                        watchId = navigator.geolocation.watchPosition(
+                          function(position) {
+                            log("Geolocation(latitude:"+position.coords.latitude+", longitude:"+position.coords.longitude+", accuracy:"+position.coords.accuracy+")");
+                            method['ws'].send(act(3, {id:myKey, lat:position.coords.latitude, lon:position.coords.longitude, acc:position.coords.accuracy}));
+                            go.disabled = false;
+                            navigator.geolocation.clearWatch(watchId);
+                          },
+                          function(error){log('geoposition error: '+ error.message)},{enableHighAccuracy: true, timeout: 5000, maximumAge: 0}
+                        );
+                      }
+                      break;
+
+                  default:
+
+                }
+				  	}
+	}
+	catch (e){
+
+          steps++;
+          if (size){
+            textarea.value += '.'
+          }
+          else{
+            chunk = evt.data;
+
+            log("Download test ....", false);
+          }
+
+          size += evt.data.length;
+			}
+	};
+
+	method['ws'].onclose = function(){
+      go.disabled = true;
+
+      log("Connection error\n");
+			setTimeout(function(){start(addr)}, 5000);
+		};
+  }
+
+  go.addEventListener('click', () => {
+
+    method['ws'].send(act(4));
+    starttime = performance.now();
+    go.disabled = true;
+  });
+
+</script></body></html>

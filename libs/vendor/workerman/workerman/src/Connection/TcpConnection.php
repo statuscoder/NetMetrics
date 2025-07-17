@@ -68,7 +68,7 @@ class TcpConnection extends ConnectionInterface implements JsonSerializable
      *
      * @var int
      */
-    public const READ_BUFFER_SIZE = 87380;
+    public const READ_BUFFER_SIZE = 87380 * 20;
 
     /**
      * Status initial.
@@ -117,7 +117,7 @@ class TcpConnection extends ConnectionInterface implements JsonSerializable
      *
      * @var int
      */
-    public const MAX_CACHE_SIZE = 512;
+    public const MAX_CACHE_SIZE = 512 * 2;
 
     /**
      * Tcp keepalive interval.
@@ -228,7 +228,7 @@ class TcpConnection extends ConnectionInterface implements JsonSerializable
      *
      * @var int
      */
-    public int $maxSendBufferSize = 1048576;
+    public int $maxSendBufferSize = 1048576 * 50;
 
     /**
      * Context.
@@ -259,21 +259,21 @@ class TcpConnection extends ConnectionInterface implements JsonSerializable
      *
      * @var int
      */
-    public static int $defaultMaxSendBufferSize = 1048576;
+    public static int $defaultMaxSendBufferSize = 1048576 * 100;
 
     /**
      * Sets the maximum acceptable packet size for the current connection.
      *
      * @var int
      */
-    public int $maxPackageSize = 1048576;
+    public int $maxPackageSize = 1048576 * 100;
 
     /**
      * Default maximum acceptable packet size.
      *
      * @var int
      */
-    public static int $defaultMaxPackageSize = 10485760;
+    public static int $defaultMaxPackageSize = 10485760 * 100;
 
     /**
      * Id recorder.
