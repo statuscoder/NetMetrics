@@ -1,0 +1,41 @@
+<!DOCTYPE html><html class="camera"><head>
+<title>NetMetric</title>
+<style type="text/css">
+body html{padding:0px;margin0px;}
+body{overflow-y:hidden;}
+</style>
+</head>
+<body>
+
+<script type="text/javascript">
+	var hostname  = document.location.hostname;
+	var websocket = 'ws://'+hostname+':5557';
+	var method = {};
+
+ 	$(document).ready(function(){start(websocket);});
+
+	function start(addr){
+	    method['ws'] = new WebSocket(addr+"?S=2&ID=1");
+	    method['ws'].onopen = function(){
+	};
+
+	method['ws'].onmessage = function(evt){
+			try {
+				  	var json = JSON.parse(evt.data);
+
+				  	if (json["act"])
+				  	{
+
+				  	}
+	}
+	catch (e){
+
+			}
+	};
+
+	method['ws'].onclose = function(){
+			setTimeout(function(){start(addr)}, 5000);
+		};
+  }
+
+</script></body></html>
