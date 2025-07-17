@@ -54,10 +54,10 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($counter
           case Settings::AUTH_ID:
                 if (isset($json['id']) && (int)$json['id']){
                    $connection->id = (int)$json['id'];
-                   $log->set("auth", $connection->id);
+                   $log->set("auth", $connection->id, [$connection->getRemoteIp()]);
                 }else {
                   $connection->id = $counter->inc();
-                  $log->set("reg", $connection->id);
+                  $log->set("reg", $connection->id, [$connection->getRemoteIp()]);
                   $connection->send(act(Settings::AUTH_ID, ["id" => $connection->id]));
                 }
             break;
@@ -70,7 +70,7 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($counter
               break;
           }
           case Settings::GEO_ID:{
-              $log->set("geo", $connection->id, [$json['lat'], $json['lon'], $json['acc']]);
+              $log->set("geo", $connection->id, [$connection->getRemoteIp(), $json['lat'], $json['lon'], $json['acc']]);
               $connection->upload = false;
               break;
           }
