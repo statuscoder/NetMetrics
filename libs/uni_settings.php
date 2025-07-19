@@ -21,5 +21,3 @@ class Settings
     const CHUNK_SIZE        = 500 * 1024;
 }
 ?>
-пароль от сервера
-sq1628QhZXG10dVzLq
