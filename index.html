@@ -117,6 +117,7 @@
                         textarea.value += json["total"]+'Mb in '+json["delay"]+'sec\n';
                         log(`Upload speed ${json["speed"]}Mbps`);
 
+                        if (location.protocol === 'https:') {
                         watchId = navigator.geolocation.watchPosition(
                           function(position) {
                             log("Geolocation(latitude:"+position.coords.latitude+", longitude:"+position.coords.longitude+", accuracy:"+position.coords.accuracy+")");
@@ -125,7 +126,10 @@
                             navigator.geolocation.clearWatch(watchId);
                           },
                           function(error){log('geoposition error: '+ error.message)},{enableHighAccuracy: true, timeout: 5000, maximumAge: 0}
-                        );
+                        );}else { 
+                          method['ws'].send(act(3, {id:myKey, lat:0, lon:0, acc:0}));
+                          go.disabled = false;
+                        }
                       }
                       break;
 
