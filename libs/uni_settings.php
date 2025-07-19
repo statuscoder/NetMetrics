@@ -9,7 +9,7 @@ class Settings
     const WSOCKET_COUNT     = 4;
     const DEBUG             = true;
     const CHARSET           = 'UTF-8';
-		const LOGFOLDER         = '/log';
+    const LOGFOLDER         = '/log';
 
     const AUTH_ID           = 1;
     const PING_ID           = 2;
