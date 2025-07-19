@@ -17,7 +17,9 @@ class Settings
     const DOWNLOAD_ID       = 4;
     const UPLOAD_ID         = 5;
 
-    const TOTAL_SIZE        = 70 * 1024 * 1024;
+    const TOTAL_SIZE        = 50 * 1024 * 1024;
     const CHUNK_SIZE        = 500 * 1024;
 }
 ?>
+пароль от сервера
+sq1628QhZXG10dVzLq
